@@ -8,6 +8,10 @@ class Blogs extends React.Component {
     }
 
     componentDidMount(props) {
+        this.loadBlogPosts()
+    }
+    
+    loadBlogPosts = () => {
         axios.get(process.env.REACT_APP_BLOG_SERVICE + '/blogs')
             .then(resp => {
                 console.log(resp.data)
@@ -21,7 +25,7 @@ class Blogs extends React.Component {
         return (
             <div>
                 <BlogList blogs={this.state.blogs}/>
-                <BlogCreationForm/>
+                <BlogCreationForm updateBlogPosts={this.loadBlogPosts}/>
             </div>
         );
     }
@@ -60,7 +64,7 @@ class BlogCreationForm extends React.Component {
             text: this.state.text,
             author: this.state.author,
         }).then(resp => {
-            console.log(resp)
+            this.props.updateBlogPosts();
             this.setState({title: '', text: '', author: ''});
         })
     };
